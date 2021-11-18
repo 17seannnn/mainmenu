@@ -8,7 +8,8 @@ enum {
         exit_choise
 };
 
-void initmainmenu(const char (*mainmenu_text)[mm_bufsize],
+void initmainmenu(const char  *program_name,
+                  const char (*mainmenu_text)[mm_bufsize],
                   const char (*settings_text)[mm_bufsize],
                   const char (*settings_range)[mm_bufsize],
                   const void  *settings_pointer[],

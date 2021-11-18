@@ -9,6 +9,7 @@ enum {
         settings_count = 2,
 };
 
+const char  program_name[]                = "Test";
 const char  mainmenu_text[][mm_bufsize]   = { "Play game", "Settings", "Exit" };
 const char  settings_text[][mm_bufsize]   = { "Speed", "Strength" };
 const char  settings_range[][mm_bufsize]  = { "f", "0.25", "0", "1",
@@ -21,8 +22,8 @@ int main()
         printf("Speed: %d\nStrength: %d\n", speed, strength);
         printf("...\n");
         sleep(2);
-        initmainmenu(mainmenu_text, settings_text, settings_range,
-                     settings_ptr, settings_count);
+        initmainmenu(program_name, mainmenu_text, settings_text,
+                     settings_range, settings_ptr, settings_count);
         for (;;) {
                 res = mainmenu();
                 if (res == exit_choise)

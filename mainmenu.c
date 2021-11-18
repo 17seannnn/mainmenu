@@ -6,6 +6,7 @@
 
 #define MM_COUNT 3
 
+static const char *pn;
 static const char (*mt)[mm_bufsize], (*st)[mm_bufsize], (*sr)[mm_bufsize];
 static const void **sp;
 static int sc;
@@ -25,12 +26,14 @@ static void initcurses()
         curs_set(0);
 }
 
-void initmainmenu(const char (*mainmenu_text)[mm_bufsize],
+void initmainmenu(const char  *program_name,
+                  const char (*mainmenu_text)[mm_bufsize],
                   const char (*settings_text)[mm_bufsize],
                   const char (*settings_range)[mm_bufsize],
                   const void  *settings_pointer[],
                   const int    settings_count)
 {
+        pn = program_name;
         mt = mainmenu_text;
         st = settings_text;
         sr = settings_range;
@@ -72,10 +75,12 @@ void getmenuxy(const char (*p)[mm_bufsize], size_t n, int *x, int *y)
         *x = (*x - strlen(mt[max])) / 2;
 }
 
-static void draw_menu(const char (*p)[mm_bufsize], size_t n)
+static void draw_mm(const char *pn, const char (*p)[mm_bufsize], size_t n)
 {
         int i, x, y;
         clear();
+        getmaxyx(stdscr, y, x);
+        mvaddstr(y/8, (x - strlen(pn)) / 2, pn);
         getmenuxy(p, n, &x, &y);
         for (i = 0; i < n; i++, y += 2)
                 mvaddstr(y, x, p[i]);
@@ -111,7 +116,7 @@ int mainmenu()
         initcurses();
         timeout(-1);
         for (;;) {
-                draw_menu(mt, MM_COUNT);
+                draw_mm(pn, mt, MM_COUNT);
                 res = handle_mm();
                 if (res == play_choise || res == exit_choise)
                         break;
