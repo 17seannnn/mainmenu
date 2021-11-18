@@ -75,15 +75,15 @@ void getmenuxy(const char (*p)[mm_bufsize], size_t n, int *x, int *y)
         *x = (*x - strlen(mt[max])) / 2;
 }
 
-static void draw_mm(const char *pn, const char (*p)[mm_bufsize], size_t n)
+static void draw_mm()
 {
         int i, x, y;
         clear();
         getmaxyx(stdscr, y, x);
         mvaddstr(y/8, (x - strlen(pn)) / 2, pn);
-        getmenuxy(p, n, &x, &y);
-        for (i = 0; i < n; i++, y += 2)
-                mvaddstr(y, x, p[i]);
+        getmenuxy(mt, MM_COUNT, &x, &y);
+        for (i = 0; i < MM_COUNT; i++, y += 2)
+                mvaddstr(y, x, mt[i]);
         refresh();
 }
 
