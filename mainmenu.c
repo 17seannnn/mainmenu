@@ -6,8 +6,7 @@
 
 #define MM_COUNT 3
 
-static const char (*mt)[mm_bufsize], (*st)[mm_bufsize],
-                  (*sd)[mm_bufsize], (*sr)[mm_bufsize];
+static const char (*mt)[mm_bufsize], (*st)[mm_bufsize], (*sr)[mm_bufsize];
 static const void **sp;
 static int sc;
 
@@ -28,14 +27,12 @@ static void initcurses()
 
 void initmainmenu(const char (*mainmenu_text)[mm_bufsize],
                   const char (*settings_text)[mm_bufsize],
-                  const char (*settings_default)[mm_bufsize],
                   const char (*settings_range)[mm_bufsize],
                   const void  *settings_pointer[],
                   const int    settings_count)
 {
         mt = mainmenu_text;
         st = settings_text;
-        sd = settings_default;
         sr = settings_range;
         sp = settings_pointer;
         sc = settings_count;

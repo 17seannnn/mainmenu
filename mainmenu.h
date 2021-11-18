@@ -10,7 +10,6 @@ enum {
 
 void initmainmenu(const char (*mainmenu_text)[mm_bufsize],
                   const char (*settings_text)[mm_bufsize],
-                  const char (*settings_default)[mm_bufsize],
                   const char (*settings_range)[mm_bufsize],
                   const void  *settings_pointer[],
                   const int    settings_count);
