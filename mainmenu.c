@@ -116,7 +116,7 @@ int mainmenu()
         initcurses();
         timeout(-1);
         for (;;) {
-                draw_mm(pn, mt, MM_COUNT);
+                draw_mm();
                 res = handle_mm();
                 if (res == play_choise || res == exit_choise)
                         break;
