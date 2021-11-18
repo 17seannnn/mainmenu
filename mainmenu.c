@@ -98,11 +98,11 @@ static int handle_mm()
         while ((key = getch()) != '\n') {
                 switch (key) {
                 case KEY_UP:
-                        if (c.pos > 1)
+                        if (c.pos > play_choise)
                                 move_cur(&c, -1);
                         break;
                 case KEY_DOWN:
-                        if (c.pos < 3)
+                        if (c.pos < exit_choise)
                                 move_cur(&c, 1);
                         break;
                 }

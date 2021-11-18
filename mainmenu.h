@@ -3,7 +3,7 @@
 
 enum {
         mm_bufsize  = 256,
-        play_choise = 1,
+        play_choise = 0,
         settings_choise,
         exit_choise
 };
