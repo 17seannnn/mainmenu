@@ -3,9 +3,7 @@
 
 enum {
         mm_bufsize  = 256,
-        play_choise = 0,
-        settings_choise,
-        exit_choise
+        exit_choise     = 255
 };
 
 void initmainmenu(const char  *program_name,
@@ -13,6 +11,7 @@ void initmainmenu(const char  *program_name,
                   const char (*settings_text)[mm_bufsize],
                   const char (*settings_range)[mm_bufsize],
                   const void  *settings_pointer[],
+                  const int    mainmenu_count,
                   const int    settings_count);
 int  mainmenu();
 #endif
