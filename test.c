@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <curses.h>
 #include <unistd.h>
 
 #include "mainmenu.h"
@@ -19,6 +20,16 @@ static const char  settings_range[][mm_bufsize]  = { "f", "0.25", "0", "1",
                                                      "i", "1", "0", "50" };
 static const void *settings_ptr[]                = { &speed, &strength };
 
+static void initcurses()
+{
+        noecho();
+        cbreak();
+        if (has_colors())
+                start_color();
+        keypad(stdscr, 1);
+        curs_set(1);
+}
+
 int main()
 {
         int res;
@@ -27,10 +38,13 @@ int main()
         sleep(2);
         initmainmenu(program_name, mainmenu_text, settings_text, settings_range,
                      settings_ptr, mainmenu_count, settings_count);
+        initscr();
         for (;;) {
                 res = mainmenu();
+                initcurses();
                 if (res == exit_choise)
                         break;
         }
+        endwin();
         printf("Speed: %f\nStrength: %d\n", speed, strength);
 }

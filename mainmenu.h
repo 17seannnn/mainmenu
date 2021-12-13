@@ -3,7 +3,7 @@
 
 enum {
         mm_bufsize  = 256,
-        exit_choise     = 255
+        exit_choise = 255
 };
 
 void initmainmenu(const char  *program_name,

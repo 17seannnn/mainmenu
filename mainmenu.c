@@ -4,29 +4,29 @@
 
 #include "mainmenu.h"
 
+static WINDOW *pad;
+
 static const char *pn;
 static const char (*mt)[mm_bufsize], (*st)[mm_bufsize], (*sr)[mm_bufsize];
 static const void **sp;
 static int mc, sc;
 
+static int settings_pos, exit_pos;
+
 enum {
         sr_params_count = 4,
         settings_choise = 254,
-        cur_symb = '>'
+        cur_symb        = '>',
+
+        name_y = 2,
+        body_x = 20,
+        body_y = name_y + 6,
+        diff_y = 2
 };
 
 struct cur {
         int cur_x, cur_y, pos;
 };
-
-static void initcurses()
-{
-        initscr();
-        noecho();
-        cbreak();
-        keypad(stdscr, 1);
-        curs_set(0);
-}
 
 void initmainmenu(const char  *program_name,
                   const char (*mainmenu_text)[mm_bufsize],
@@ -43,6 +43,41 @@ void initmainmenu(const char  *program_name,
         sp = settings_pointer;
         mc = mainmenu_count;
         sc = settings_count;
+        settings_pos = mc - 2;
+        exit_pos     = mc - 1;
+}
+
+static void initcurses()
+{
+        int row, col;
+        getmaxyx(stdscr, row, col);
+        pad = newpad(row, col);
+        keypad(pad, 1);
+        noecho();
+        cbreak();
+        curs_set(0);
+        timeout(-1);
+}
+
+static void show_cur(struct cur c)
+{
+        mvwaddch(pad, c.cur_y, c.cur_x, cur_symb);
+}
+
+static void hide_cur(struct cur c)
+{
+        mvwaddch(pad, c.cur_y, c.cur_x, ' ');
+}
+
+static void move_cur(struct cur *c, int dpos)
+{
+        hide_cur(*c);
+        if (dpos > 0)
+                c->cur_y += diff_y;
+        else
+                c->cur_y -= diff_y;
+        c->pos += dpos;
+        show_cur(*c);
 }
 
 static int is_float(int n)
@@ -52,91 +87,15 @@ static int is_float(int n)
         return 0;
 }
 
-static void show_cur(struct cur c)
-{
-        mvaddch(c.cur_y, c.cur_x, cur_symb);
-        refresh();
-}
-
-static void hide_cur(struct cur c)
-{
-        mvaddch(c.cur_y, c.cur_x, ' ');
-        refresh();
-}
-
-static void move_cur(struct cur *c, int dpos)
-{
-        hide_cur(*c);
-        if (dpos > 0)
-                c->cur_y += 2;
-        else
-                c->cur_y -= 2;
-        c->pos += dpos;
-        show_cur(*c);
-}
-
-void getmenuxy(const char (*p)[mm_bufsize], size_t n, int *x, int *y)
-{
-        int i, max = 0;
-        for (i = 0; i < n; i++)
-                if (strlen(p[i]) > strlen(p[max]))
-                        max = i;
-        getmaxyx(stdscr, *y, *x);
-        *y = (*y - mc * 2) / 2;
-        *x = (*x - strlen(mt[max])) / 2;
-}
-
-static void draw_mm()
-{
-        int i, x, y;
-        clear();
-        getmaxyx(stdscr, y, x);
-        mvaddstr(y/8, (x - strlen(pn)) / 2, pn);
-        getmenuxy(mt, mc, &x, &y);
-        for (i = 0; i < mc; i++, y += 2)
-                mvaddstr(y, x, mt[i]);
-        refresh();
-}
-
-static int handle_mm()
-{
-        int key;
-        struct cur c;
-        getmenuxy(mt, mc, &c.cur_x, &c.cur_y);
-        c.cur_x -= 2;
-        c.pos = 0;
-        show_cur(c);
-        while ((key = getch()) != '\n') {
-                switch (key) {
-                case KEY_UP:
-                        if (c.pos > 0)
-                                move_cur(&c, -1);
-                        break;
-                case KEY_DOWN:
-                        if (c.pos < mc-1)
-                                move_cur(&c, 1);
-                        break;
-                }
-        }
-        if (c.pos == mc-1)
-                return exit_choise;
-        else
-        if (c.pos == mc-2)
-                return settings_choise;
-        else
-                return c.pos;
-}
-
 static void show_param(int n)
 {
         int x, y;
-        getmenuxy(st, sc, &x, &y);
-        x += strlen(st[n]) + 1;
-        y += n * 2;
+        x = body_x + strlen(st[n]) + 1;
+        y = body_y + n * 2;
         if (is_float(n))
-                mvprintw(y, x, "<%f>      ", *(double *)sp[n]);
+                mvwprintw(pad, y, x, "<%f>         ", *(double *)sp[n]);
         else
-                mvprintw(y, x, "<%d>      ", *(int *)sp[n]);
+                mvwprintw(pad, y, x, "<%d>         ", *(int *)sp[n]);
 }
 
 static void decrease_param(int n)
@@ -181,36 +140,83 @@ static void increase_param(int n)
         }
 } 
 
-static void draw_sm()
+static void draw_mm(int padpos, struct cur c)
 {
-        int i, x, y;
-        clear();
-        getmenuxy(st, sc, &x, &y);
+        int i, row, col, y = body_y, x = body_x;
+        getmaxyx(stdscr, row, col);
+        wclear(pad);
+        mvwaddstr(pad, name_y, (col - strlen(pn)) / 2, pn);
+        for (i = 0; i < mc; i++, y += diff_y)
+                mvwaddstr(pad, y, x, mt[i]);
+        show_cur(c);
+        prefresh(pad, padpos, 0, 0, 0, row, col);
+}
+
+static int handle_mm()
+{
+        int row, col, key, padpos = 0;
+        struct cur c = { body_x - 2, body_y, 0 };
+        getmaxyx(stdscr, row, col);
+        draw_mm(padpos, c);
+        while ((key = wgetch(pad)) != '\n') {
+                switch (key) {
+                case KEY_UP:
+                        if (c.pos > 0) {
+                                move_cur(&c, -1);
+                                padpos -= diff_y;
+                        }
+                        break;
+                case KEY_DOWN:
+                        if (c.pos < exit_pos) {
+                                move_cur(&c, 1);
+                                padpos += diff_y;
+                        }
+                        break;
+                }
+                prefresh(pad, padpos, 0, 0, 0, row, col);
+        }
+        if (c.pos == settings_pos)
+                return settings_choise;
+        else
+        if (c.pos == exit_pos)
+                return exit_choise;
+        else
+                return c.pos;
+}
+
+static void draw_sm(int padpos, struct cur c)
+{
+        int i, row, col, y = body_y, x = body_x;
+        getmaxyx(stdscr, row, col);
+        wclear(pad);
         for (i = 0; i < sc; i++, y += 2) {
-                mvaddstr(y, x, st[i]);
+                mvwaddstr(pad, y, x, st[i]);
                 show_param(i);
         }
-        mvaddstr(y, x, mt[mc-1]);
-        refresh();
+        mvwaddstr(pad, y, x, mt[exit_pos]);
+        show_cur(c);
+        prefresh(pad, padpos, 0, 0, 0, row, col);
 }
 
 static void handle_sm()
 {
-        int key;
-        struct cur c;
-        getmenuxy(st, sc, &c.cur_x, &c.cur_y);
-        c.cur_x -= 2;
-        c.pos = 0;
-        show_cur(c);
-        while ((key = getch()) != '\n') {
+        int key, row, col, padpos = 0;
+        struct cur c = { body_x - 2, body_y, 0 };
+        getmaxyx(stdscr, row, col);
+        draw_sm(padpos, c);
+        while ((key = wgetch(pad)) != '\n') {
                 switch (key) {
                 case KEY_UP:
-                        if (c.pos > 0)
+                        if (c.pos > 0) {
                                 move_cur(&c, -1);
+                                padpos -= diff_y;
+                        }
                         break;
                 case KEY_DOWN:
-                        if (c.pos < sc)
+                        if (c.pos < sc) {
                                 move_cur(&c, 1);
+                                padpos += diff_y;
+                        }
                         break;
                 case KEY_LEFT:
                         if (c.pos == sc)
@@ -225,6 +231,7 @@ static void handle_sm()
                         show_param(c.pos);
                         break;
                 }
+                prefresh(pad, padpos, 0, 0, 0, row, col);
         }
 }
 
@@ -232,15 +239,13 @@ int mainmenu()
 {
         int res;
         initcurses();
-        timeout(-1);
         for (;;) {
-                draw_mm();
                 res = handle_mm();
-                if (res != settings_choise)
+                if (res == settings_choise)
+                        handle_sm();
+                else
                         break;
-                draw_sm();
-                handle_sm();
         }
-        endwin();
+        delwin(pad);
         return res;
 }
