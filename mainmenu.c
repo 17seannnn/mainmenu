@@ -18,9 +18,16 @@ enum {
         settings_choise = 254,
         cur_symb        = '>',
 
-        name_y = 2,
-        body_x = 20,
-        body_y = name_y + 6,
+        name_nrow = 3,
+        name_y    = 1,
+        name_sx   = 0,
+        name_sy   = 0,
+
+        body_x  = 20,
+        body_y  = 6,
+        body_sx = 0,
+        body_sy = name_nrow,
+
         diff_y = 2
 };
 
@@ -51,7 +58,7 @@ static void initcurses()
 {
         int row, col;
         getmaxyx(stdscr, row, col);
-        pad = newpad(row, col);
+        pad = newpad(row - name_nrow, col);
         keypad(pad, 1);
         noecho();
         cbreak();
@@ -140,16 +147,23 @@ static void increase_param(int n)
         }
 } 
 
+static void draw_name(WINDOW **name)
+{
+        int col = getmaxx(stdscr);
+        *name = newwin(name_nrow, col, name_sy, name_sx);
+        mvwaddstr(*name, name_y, (col - strlen(pn)) / 2, pn);
+        wrefresh(*name);
+}
+
 static void draw_mm(int padpos, struct cur c)
 {
         int i, row, col, y = body_y, x = body_x;
         getmaxyx(stdscr, row, col);
         wclear(pad);
-        mvwaddstr(pad, name_y, (col - strlen(pn)) / 2, pn);
         for (i = 0; i < mc; i++, y += diff_y)
                 mvwaddstr(pad, y, x, mt[i]);
         show_cur(c);
-        prefresh(pad, padpos, 0, 0, 0, row, col);
+        prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
 }
 
 static int handle_mm()
@@ -173,7 +187,7 @@ static int handle_mm()
                         }
                         break;
                 }
-                prefresh(pad, padpos, 0, 0, 0, row, col);
+                prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
         }
         if (c.pos == settings_pos)
                 return settings_choise;
@@ -195,7 +209,7 @@ static void draw_sm(int padpos, struct cur c)
         }
         mvwaddstr(pad, y, x, mt[exit_pos]);
         show_cur(c);
-        prefresh(pad, padpos, 0, 0, 0, row, col);
+        prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
 }
 
 static void handle_sm()
@@ -231,14 +245,16 @@ static void handle_sm()
                         show_param(c.pos);
                         break;
                 }
-                prefresh(pad, padpos, 0, 0, 0, row, col);
+                prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
         }
 }
 
 int mainmenu()
 {
         int res;
+        WINDOW *name;
         initcurses();
+        draw_name(&name);
         for (;;) {
                 res = handle_mm();
                 if (res == settings_choise)
@@ -246,6 +262,7 @@ int mainmenu()
                 else
                         break;
         }
+        delwin(name);
         delwin(pad);
         return res;
 }
