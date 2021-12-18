@@ -9,8 +9,8 @@ enum {
         mainmenu_count = 3
 };
 
-static double speed = 0.5;
-static int strength = 25;
+double speed = 0.5;
+int strength = 25;
 
 static const char  program_name[]                = "Test";
 static const char  mainmenu_text[][mm_bufsize]   = { "Play game", "Settings",
@@ -19,6 +19,11 @@ static const char  settings_text[][mm_bufsize]   = { "Speed", "Strength" };
 static const char  settings_range[][mm_bufsize]  = { "f", "0.25", "0", "1",
                                                      "i", "1", "0", "50" };
 static const void *settings_ptr[]                = { &speed, &strength };
+static const int   mainmenu_colors[mm_colors_count] = {
+                                        COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
+                                        COLOR_WHITE, COLOR_BLACK, 0,
+                                        COLOR_RED, COLOR_BLACK, A_BOLD,
+                                        COLOR_BLACK, COLOR_RED, 0 };
 
 static void initcurses()
 {
@@ -37,7 +42,8 @@ int main()
         printf("...\n");
         sleep(2);
         initmainmenu(program_name, mainmenu_text, settings_text, settings_range,
-                     settings_ptr, mainmenu_count, settings_count);
+                     settings_ptr, mainmenu_count, settings_count,
+                     mainmenu_colors);
         initscr();
         for (;;) {
                 res = mainmenu();
