@@ -48,35 +48,14 @@ struct cur {
         int cur_x, cur_y, pos;
 };
 
-static WINDOW *pad;
+int settings_pos, exit_pos;
+static WINDOW *name, *pad;
 
-static const char *pn;
-static const char (*mt)[mm_bufsize], (*st)[mm_bufsize], (*sr)[mm_bufsize];
-static const void **sp;
-static       int  mc, sc;
-static       int  settings_pos, exit_pos;
-static const int  *mm_colors;
-
-void initmainmenu(const char  *program_name,
-                  const char (*mainmenu_text)[mm_bufsize],
-                  const char (*settings_text)[mm_bufsize],
-                  const char (*settings_range)[mm_bufsize],
-                  const void  *settings_pointer[],
-                  const int    mainmenu_count,
-                  const int    settings_count,
-                  const int    mainmenu_colors[mm_colors_count])
-{
-        pn = program_name;
-        mt = mainmenu_text;
-        st = settings_text;
-        sr = settings_range;
-        sp = settings_pointer;
-        mc = mainmenu_count;
-        sc = settings_count;
-        mm_colors = mainmenu_colors;
-        settings_pos = mc - 2;
-        exit_pos     = mc - 1;
-}
+extern const char pn[];
+extern const char mt[][mm_bufsize], st[][mm_bufsize], sr[][mm_bufsize];
+extern const void *sp[];
+extern const int  mc, sc;
+extern const int  mm_colors[];
 
 static void initcurses()
 {
@@ -94,6 +73,19 @@ static void initcurses()
         init_pair(body_pair, mm_colors[body_fg], mm_colors[body_bg]);
         init_pair(cur_pair,  mm_colors[cur_fg],  mm_colors[cur_bg]);
         init_pair(apar_pair, mm_colors[apar_fg], mm_colors[apar_bg]);
+}
+
+static void initmm()
+{
+        settings_pos = mc - 2;
+        exit_pos     = mc - 1;
+        initcurses();
+}
+
+static void freemm()
+{
+        delwin(name);
+        delwin(pad);
 }
 
 static void show_cur(struct cur c)
@@ -187,13 +179,13 @@ static void increase_param(int n)
         }
 } 
 
-static void draw_name(WINDOW **name)
+static void draw_name()
 {
         int col = getmaxx(stdscr);
-        *name = newwin(name_nrow, col, name_sy, name_sx);
-        wattrset(*name, COLOR_PAIR(name_pair) | mm_colors[name_attr]);
-        mvwaddstr(*name, name_y, (col - strlen(pn)) / 2, pn);
-        wrefresh(*name);
+        name = newwin(name_nrow, col, name_sy, name_sx);
+        wattrset(name, COLOR_PAIR(name_pair) | mm_colors[name_attr]);
+        mvwaddstr(name, name_y, (col - strlen(pn)) / 2, pn);
+        wrefresh(name);
 }
 
 static void draw_mm(int padpos, struct cur c)
@@ -302,9 +294,8 @@ static void handle_sm()
 int mainmenu()
 {
         int res;
-        WINDOW *name;
-        initcurses();
-        draw_name(&name);
+        initmm();
+        draw_name();
         for (;;) {
                 res = handle_mm();
                 if (res == settings_choise)
@@ -312,7 +303,6 @@ int mainmenu()
                 else
                         break;
         }
-        delwin(name);
-        delwin(pad);
+        freemm();
         return res;
 }
