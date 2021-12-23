@@ -7,6 +7,6 @@ enum {
         exit_choise     = 255
 };
 
-int  mainmenu();
+int mainmenu();
 
 #endif
