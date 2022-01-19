@@ -10,7 +10,8 @@ int strength = 25;
 const char  pn[]             = "Test";
 const char  mt[][mm_bufsize] = { "Play game", "Settings", "Exit" };
 const char  st[][mm_bufsize] = { "Speed", "Strength" };
-const char  sr[][mm_bufsize] = { "f", "0.25", "0", "1", "i", "1", "0", "50" };
+const char  sr[][mm_bufsize] = { "f", "0", "0.25", "0", "1",
+                                 "i", "25", "1", "0", "50" };
 const void *sp[]             = { &speed, &strength };
 const int   mc = 3, sc = 2;
 const int   mm_colors[mm_colors_count] = {

@@ -5,7 +5,6 @@
 #include "mainmenu.h"
 
 enum {
-        sr_params_count = 4,
         settings_choise = 254,
         cur_symb        = '>',
 
@@ -41,7 +40,13 @@ enum {
         name_pair = 1,
         body_pair,
         cur_pair,
-        apar_pair
+        apar_pair,
+
+        sr_params_count = 5,
+        range_default   = 1,
+        range_diff,
+        range_min,
+        range_max
 };
 
 struct cur {
@@ -137,22 +142,27 @@ static void show_param(int n, int cur)
                 waddch(pad, ' ');
 }
 
+static void get_range_params() /* TODO */
+{
+
+}
+
 static void decrease_param(int n)
 {
-        int irange, imin, imax;
-        double frange, fmin, fmax;
+        int idiff, imin, imax;
+        double fdiff, fmin, fmax;
         if (is_float(n)) {
-                sscanf(sr[sr_params_count*n + 1], "%lf", &frange);
-                sscanf(sr[sr_params_count*n + 2], "%lf", &fmin);
-                sscanf(sr[sr_params_count*n + 3], "%lf", &fmax);
-                *(double *)sp[n] -= frange;
+                sscanf(sr[sr_params_count*n + range_diff], "%lf", &fdiff);
+                sscanf(sr[sr_params_count*n + range_min],  "%lf", &fmin);
+                sscanf(sr[sr_params_count*n + range_max],  "%lf", &fmax);
+                *(double *)sp[n] -= fdiff;
                 if (*(double *)sp[n] < fmin)
                         *(double *)sp[n] = fmax;
         } else {
-                sscanf(sr[sr_params_count*n + 1], "%d", &irange);
-                sscanf(sr[sr_params_count*n + 2], "%d", &imin);
-                sscanf(sr[sr_params_count*n + 3], "%d", &imax);
-                *(int *)sp[n] -= irange;
+                sscanf(sr[sr_params_count*n + range_diff], "%d", &idiff);
+                sscanf(sr[sr_params_count*n + range_min],  "%d", &imin);
+                sscanf(sr[sr_params_count*n + range_max],  "%d", &imax);
+                *(int *)sp[n] -= idiff;
                 if (*(int *)sp[n] < imin)
                         *(int *)sp[n] = imax;
         }
@@ -160,20 +170,20 @@ static void decrease_param(int n)
 
 static void increase_param(int n)
 {
-        int irange, imin, imax;
-        double frange, fmin, fmax;
+        int idiff, imin, imax;
+        double fdiff, fmin, fmax;
         if (is_float(n)) {
-                sscanf(sr[sr_params_count*n + 1], "%lf", &frange);
-                sscanf(sr[sr_params_count*n + 2], "%lf", &fmin);
-                sscanf(sr[sr_params_count*n + 3], "%lf", &fmax);
-                *(double *)sp[n] += frange;
+                sscanf(sr[sr_params_count*n + range_diff], "%lf", &fdiff);
+                sscanf(sr[sr_params_count*n + range_min],  "%lf", &fmin);
+                sscanf(sr[sr_params_count*n + range_max],  "%lf", &fmax);
+                *(double *)sp[n] += fdiff;
                 if (*(double *)sp[n] > fmax)
                         *(double *)sp[n] = fmin;
         } else {
-                sscanf(sr[sr_params_count*n + 1], "%d", &irange);
-                sscanf(sr[sr_params_count*n + 2], "%d", &imin);
-                sscanf(sr[sr_params_count*n + 3], "%d", &imax);
-                *(int *)sp[n] += irange;
+                sscanf(sr[sr_params_count*n + range_diff], "%d", &idiff);
+                sscanf(sr[sr_params_count*n + range_min],  "%d", &imin);
+                sscanf(sr[sr_params_count*n + range_max],  "%d", &imax);
+                *(int *)sp[n] += idiff;
                 if (*(int *)sp[n] > imax)
                         *(int *)sp[n] = imin;
         }
