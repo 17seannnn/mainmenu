@@ -142,26 +142,40 @@ static void show_param(int n, int cur)
                 waddch(pad, ' ');
 }
 
-static void get_range_params() /* TODO */
+static void get_range_params(int n, void *def, void *diff, void *min, void *max)
 {
-
+        if (is_float(n)) {
+                sscanf(sr[sr_params_count*n + range_default], "%lf",
+                                                              (double *)def);
+                sscanf(sr[sr_params_count*n + range_diff],    "%lf",
+                                                              (double *)diff);
+                sscanf(sr[sr_params_count*n + range_min],     "%lf",
+                                                              (double *)min);
+                sscanf(sr[sr_params_count*n + range_max],     "%lf",
+                                                              (double *)max);
+        } else {
+                sscanf(sr[sr_params_count*n + range_default], "%d",
+                                                              (int *)def);
+                sscanf(sr[sr_params_count*n + range_diff],    "%d",
+                                                              (int *)diff);
+                sscanf(sr[sr_params_count*n + range_min],     "%d",
+                                                              (int *)min);
+                sscanf(sr[sr_params_count*n + range_max],     "%d",
+                                                              (int *)max);
+        }
 }
 
 static void decrease_param(int n)
 {
-        int idiff, imin, imax;
-        double fdiff, fmin, fmax;
+        int idef, idiff, imin, imax;
+        double fdef, fdiff, fmin, fmax;
         if (is_float(n)) {
-                sscanf(sr[sr_params_count*n + range_diff], "%lf", &fdiff);
-                sscanf(sr[sr_params_count*n + range_min],  "%lf", &fmin);
-                sscanf(sr[sr_params_count*n + range_max],  "%lf", &fmax);
+                get_range_params(n, &fdef, &fdiff, &fmin, &fmax);
                 *(double *)sp[n] -= fdiff;
                 if (*(double *)sp[n] < fmin)
                         *(double *)sp[n] = fmax;
         } else {
-                sscanf(sr[sr_params_count*n + range_diff], "%d", &idiff);
-                sscanf(sr[sr_params_count*n + range_min],  "%d", &imin);
-                sscanf(sr[sr_params_count*n + range_max],  "%d", &imax);
+                get_range_params(n, &idef, &idiff, &imin, &imax);
                 *(int *)sp[n] -= idiff;
                 if (*(int *)sp[n] < imin)
                         *(int *)sp[n] = imax;
@@ -170,19 +184,15 @@ static void decrease_param(int n)
 
 static void increase_param(int n)
 {
-        int idiff, imin, imax;
-        double fdiff, fmin, fmax;
+        int idef, idiff, imin, imax;
+        double fdef, fdiff, fmin, fmax;
         if (is_float(n)) {
-                sscanf(sr[sr_params_count*n + range_diff], "%lf", &fdiff);
-                sscanf(sr[sr_params_count*n + range_min],  "%lf", &fmin);
-                sscanf(sr[sr_params_count*n + range_max],  "%lf", &fmax);
+                get_range_params(n, &fdef, &fdiff, &fmin, &fmax);
                 *(double *)sp[n] += fdiff;
                 if (*(double *)sp[n] > fmax)
                         *(double *)sp[n] = fmin;
         } else {
-                sscanf(sr[sr_params_count*n + range_diff], "%d", &idiff);
-                sscanf(sr[sr_params_count*n + range_min],  "%d", &imin);
-                sscanf(sr[sr_params_count*n + range_max],  "%d", &imax);
+                get_range_params(n, &idef, &idiff, &imin, &imax);
                 *(int *)sp[n] += idiff;
                 if (*(int *)sp[n] > imax)
                         *(int *)sp[n] = imin;
