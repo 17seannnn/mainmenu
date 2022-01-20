@@ -58,7 +58,7 @@ static WINDOW *name, *pad;
 
 extern const char pn[];
 extern const char mt[][mm_bufsize], st[][mm_bufsize], sr[][mm_bufsize];
-extern const void *sp[];
+extern       void *sp[];
 extern const int  mc, sc;
 extern const int  mm_colors[];
 
@@ -80,10 +80,35 @@ static void initcurses()
         init_pair(apar_pair, mm_colors[apar_fg], mm_colors[apar_bg]);
 }
 
+void load_defaults()
+{
+        int i, def;
+        for (i = 0; i < sc; i++) {
+                sscanf(sr[sr_params_count * i + range_default], "%d", &def);
+                *(int *)sp[i] = def;
+        }
+}
+
+int load_params()
+{
+        return 0;
+}
+
+void save_params()
+{
+
+}
+
 static void initmm()
 {
+        int res;
         settings_pos = mc - 2;
         exit_pos     = mc - 1;
+        res = load_params();
+        if (!res) {
+                load_defaults();
+                save_params();
+        }
         initcurses();
 }
 
