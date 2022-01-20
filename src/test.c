@@ -8,9 +8,10 @@ double speed = 0;
 int strength = 0;
 
 const char  pn[]             = "Test";
+const char  fn[]             = ".testcfg";
 const char  mt[][mm_bufsize] = { "Play game", "Settings", "Exit" };
 const char  st[][mm_bufsize] = { "Speed", "Strength" };
-const char  sr[][mm_bufsize] = { "f", "0", "0.25", "0", "1",
+const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
                                  "i", "25", "1", "0", "50" };
       void *sp[]             = { &speed, &strength };
 const int   mc = 3, sc = 2;

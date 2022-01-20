@@ -46,7 +46,12 @@ enum {
         range_default   = 1,
         range_diff,
         range_min,
-        range_max
+        range_max,
+
+        key_start   = '!',
+        key_stop    = '=',
+        value_start = '"',
+        value_stop  = '"'
 };
 
 struct cur {
@@ -61,6 +66,13 @@ extern const char mt[][mm_bufsize], st[][mm_bufsize], sr[][mm_bufsize];
 extern       void *sp[];
 extern const int  mc, sc;
 extern const int  mm_colors[];
+
+static int is_float(int n)
+{
+        if (0 == strcmp(sr[n * sr_params_count], "f"))
+                return 1;
+        return 0;
+}
 
 static void initcurses()
 {
@@ -82,10 +94,18 @@ static void initcurses()
 
 void load_defaults()
 {
-        int i, def;
+        int i, idef;
+        double fdef;
         for (i = 0; i < sc; i++) {
-                sscanf(sr[sr_params_count * i + range_default], "%d", &def);
-                *(int *)sp[i] = def;
+                if (is_float(i)) {
+                        sscanf(sr[sr_params_count * i + range_default],
+                               "%lf", &fdef);
+                        *(double *)sp[i] = fdef;
+                } else {
+                        sscanf(sr[sr_params_count * i + range_default],
+                               "%d", &idef);
+                        *(int *)sp[i] = idef;
+                }
         }
 }
 
@@ -139,13 +159,6 @@ static void move_cur(struct cur *c, int dpos)
                 c->cur_y -= diff_y;
         c->pos += dpos;
         show_cur(*c);
-}
-
-static int is_float(int n)
-{
-        if (0 == strcmp(sr[n * sr_params_count], "f"))
-                return 1;
-        return 0;
 }
 
 static void show_param(int n, int cur)
