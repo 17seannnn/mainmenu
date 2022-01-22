@@ -1,4 +1,5 @@
-add settings saver
+check if all chars that use getchar are int
+sscanf could be replaced by atof, atoi
 
 TODO errors
 make gettext by ifndef and gettext_noop
