@@ -32,22 +32,9 @@ static void initcurses()
         curs_set(1);
 }
 
-static void start_output()
-{
-        printf("Speed: %f\nStrength: %d\n", speed, strength);
-        printf("...\n");
-        sleep(1);
-}
-
-static void end_output()
-{
-        printf("Speed: %f\nStrength: %d\n", speed, strength);
-}
-
 int main()
 {
         int res;
-        start_output();
         initscr();
         for (;;) {
                 res = mainmenu();
@@ -56,5 +43,4 @@ int main()
                         break;
         }
         endwin();
-        end_output();
 }
