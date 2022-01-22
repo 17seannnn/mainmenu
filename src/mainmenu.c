@@ -78,7 +78,7 @@ static int is_float(int n)
         return 0;
 }
 
-void init_fileloc()
+static void init_fileloc()
 {
         strncpy(fileloc, getenv("HOME"), mm_bufsize);
         strncat(fileloc, "/", mm_bufsize-1);
@@ -103,7 +103,7 @@ static void initcurses()
         init_pair(apar_pair, mm_colors[apar_fg], mm_colors[apar_bg]);
 }
 
-void load_defaults()
+static void load_defaults()
 {
         int i;
         for (i = 0; i < sc; i++)
@@ -115,7 +115,7 @@ void load_defaults()
                                                 i + range_default]);
 }
 
-void parse_param(FILE *f, char *param, int bufsize)
+static void parse_param(FILE *f, char *param, int bufsize)
 {
         int i, c;
         do
@@ -130,7 +130,7 @@ void parse_param(FILE *f, char *param, int bufsize)
         param[i] = 0;
 }
 
-int load_params()
+static int load_params()
 {
         int i;
         char param[mm_bufsize];
@@ -149,7 +149,7 @@ int load_params()
         return 1;
 }
 
-void save_params()
+static void save_params()
 {
         int i;
         FILE *f;
