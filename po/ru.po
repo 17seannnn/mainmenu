@@ -1,0 +1,40 @@
+# Russian translation for test program.
+# Copyright (C) 2022 Sergey Nikonov (17seannnn)
+# This file is distributed under the same license as the mainmenu package.
+# Sergey Nikonov (17seannnn), 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-22 15:09+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: test.c:18
+msgid "Test"
+msgstr "Тест"
+
+#: test.c:20
+msgid "Play game"
+msgstr "Играть"
+
+#: test.c:21
+msgid "Settings"
+msgstr "Настройки"
+
+#: test.c:22
+msgid "Exit"
+msgstr "Выйти"
+
+#: test.c:24
+msgid "Speed"
+msgstr "Скорость"
+
+#: test.c:25
+msgid "Strength"
+msgstr "Сила"

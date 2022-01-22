@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curses.h>
+#include <libintl.h>
+
+#define _(STR) gettext(STR)
+#define N_(STR) STR
 
 #include "mainmenu.h"
 
@@ -61,12 +65,11 @@ static WINDOW *name, *pad;
 
 static char fileloc[mm_bufsize];
 
-extern const char fn[];
-extern const char pn[];
-extern const char mt[][mm_bufsize], st[][mm_bufsize], sr[][mm_bufsize];
+extern const char fn[], pn[], mt[][mm_bufsize],
+                              st[][mm_bufsize],
+                              sr[][mm_bufsize];
 extern       void *sp[];
-extern const int  mc, sc;
-extern const int  mm_colors[];
+extern const int  mc, sc, mm_colors[];
 
 static int is_float(int n)
 {
@@ -213,7 +216,7 @@ static void show_param(int n, int cur)
 {
         int i, x, y, col;
         col = getmaxx(stdscr);
-        x = body_x + strlen(st[n]) + 1;
+        x = body_x + strlen(_(st[n])) + 1;
         y = body_y + n * 2;
         if (cur)
                 wattrset(pad, COLOR_PAIR(apar_pair) | mm_colors[apar_attr]);
@@ -284,7 +287,7 @@ static void draw_name()
         int col = getmaxx(stdscr);
         name = newwin(name_nrow, col, name_sy, name_sx);
         wattrset(name, COLOR_PAIR(name_pair) | mm_colors[name_attr]);
-        mvwaddstr(name, name_y, (col - strlen(pn)) / 2, pn);
+        mvwaddstr(name, name_y, (col - strlen(pn)) / 2, _(pn));
         wrefresh(name);
 }
 
@@ -295,7 +298,7 @@ static void draw_mm(int padpos, struct cur c)
         wclear(pad);
         wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
         for (i = 0; i < mc; i++, y += diff_y)
-                mvwaddstr(pad, y, x, mt[i]);
+                mvwaddstr(pad, y, x, _(mt[i]));
         show_cur(c);
         prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
 }
@@ -339,11 +342,11 @@ static void draw_sm(int padpos, struct cur c)
         wclear(pad);
         for (i = 0; i < sc; i++, y += 2) {
                 wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
-                mvwaddstr(pad, y, x, st[i]);
+                mvwaddstr(pad, y, x, _(st[i]));
                 i == 0 ? show_param(i, 1) : show_param(i, 0);
         }
         wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
-        mvwaddstr(pad, y, x, mt[exit_pos]);
+        mvwaddstr(pad, y, x, _(mt[exit_pos]));
         show_cur(c);
         prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
 }
