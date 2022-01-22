@@ -102,19 +102,14 @@ static void initcurses()
 
 void load_defaults()
 {
-        int i, idef;
-        double fdef;
-        for (i = 0; i < sc; i++) {
-                if (is_float(i)) {
-                        sscanf(sr[sr_params_count * i + range_default],
-                               "%lf", &fdef);
-                        *(double *)sp[i] = fdef;
-                } else {
-                        sscanf(sr[sr_params_count * i + range_default],
-                               "%d", &idef);
-                        *(int *)sp[i] = idef;
-                }
-        }
+        int i;
+        for (i = 0; i < sc; i++)
+                if (is_float(i))
+                        *(double *)sp[i] = atof(sr[sr_params_count *
+                                                i + range_default]);
+                else
+                        *(int *)sp[i] = atoi(sr[sr_params_count *
+                                                i + range_default]);
 }
 
 void parse_param(FILE *f, char *param, int bufsize)
@@ -143,9 +138,9 @@ int load_params()
         for (i = 0; i < sc; i++) {
                 parse_param(f, param, mm_bufsize);
                 if (is_float(i))
-                        sscanf(param, "%lf", (double *)sp[i]);
+                        *(double *)sp[i] = atof(param);
                 else
-                        sscanf(param, "%d", (int *)sp[i]);
+                        *(int *)sp[i] = atoi(param);
         }
         fclose(f);
         return 1;
@@ -236,23 +231,15 @@ static void show_param(int n, int cur)
 static void get_range_params(int n, void *def, void *diff, void *min, void *max)
 {
         if (is_float(n)) {
-                sscanf(sr[sr_params_count*n + range_default], "%lf",
-                                                              (double *)def);
-                sscanf(sr[sr_params_count*n + range_diff],    "%lf",
-                                                              (double *)diff);
-                sscanf(sr[sr_params_count*n + range_min],     "%lf",
-                                                              (double *)min);
-                sscanf(sr[sr_params_count*n + range_max],     "%lf",
-                                                              (double *)max);
+                *(double *)def  = atof(sr[sr_params_count*n + range_default]);
+                *(double *)diff = atof(sr[sr_params_count*n + range_diff]);
+                *(double *)min  = atof(sr[sr_params_count*n + range_min]);
+                *(double *)max  = atof(sr[sr_params_count*n + range_max]);
         } else {
-                sscanf(sr[sr_params_count*n + range_default], "%d",
-                                                              (int *)def);
-                sscanf(sr[sr_params_count*n + range_diff],    "%d",
-                                                              (int *)diff);
-                sscanf(sr[sr_params_count*n + range_min],     "%d",
-                                                              (int *)min);
-                sscanf(sr[sr_params_count*n + range_max],     "%d",
-                                                              (int *)max);
+                *(int *)def  = atoi(sr[sr_params_count*n + range_default]);
+                *(int *)diff = atoi(sr[sr_params_count*n + range_diff]);
+                *(int *)min  = atoi(sr[sr_params_count*n + range_min]);
+                *(int *)max  = atoi(sr[sr_params_count*n + range_max]);
         }
 }
 
