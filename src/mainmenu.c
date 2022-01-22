@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <curses.h>
 
@@ -48,19 +49,19 @@ enum {
         range_min,
         range_max,
 
-        key_start   = '!',
-        key_stop    = '=',
-        value_start = '"',
-        value_stop  = '"'
+        param_border = '"',
 };
 
 struct cur {
         int cur_x, cur_y, pos;
 };
 
-int settings_pos, exit_pos;
+static int settings_pos, exit_pos;
 static WINDOW *name, *pad;
 
+static char fileloc[mm_bufsize];
+
+extern const char fn[];
 extern const char pn[];
 extern const char mt[][mm_bufsize], st[][mm_bufsize], sr[][mm_bufsize];
 extern       void *sp[];
@@ -72,6 +73,13 @@ static int is_float(int n)
         if (0 == strcmp(sr[n * sr_params_count], "f"))
                 return 1;
         return 0;
+}
+
+void init_fileloc()
+{
+        strncpy(fileloc, getenv("HOME"), mm_bufsize);
+        strncat(fileloc, "/", mm_bufsize-1);
+        strncat(fileloc, fn, mm_bufsize-1);
 }
 
 static void initcurses()
@@ -109,9 +117,38 @@ void load_defaults()
         }
 }
 
+void parse_param(FILE *f, char *param, int bufsize)
+{
+        int i, c;
+        do
+                c = fgetc(f);
+        while (c != param_border);
+        for (i = 0; i < bufsize-1; i++) {
+                c = fgetc(f);
+                if (c == param_border || c == EOF)
+                        break;
+                param[i] = c;
+        }
+        param[i] = 0;
+}
+
 int load_params()
 {
-        return 0;
+        int i;
+        char param[mm_bufsize];
+        FILE *f;
+        f = fopen(fileloc, "r");
+        if (!f)
+                return 0;
+        for (i = 0; i < sc; i++) {
+                parse_param(f, param, mm_bufsize);
+                if (is_float(i))
+                        sscanf(param, "%lf", (double *)sp[i]);
+                else
+                        sscanf(param, "%d", (int *)sp[i]);
+        }
+        fclose(f);
+        return 1;
 }
 
 void save_params()
@@ -124,6 +161,7 @@ static void initmm()
         int res;
         settings_pos = mc - 2;
         exit_pos     = mc - 1;
+        init_fileloc();
         res = load_params();
         if (!res) {
                 load_defaults();
