@@ -153,7 +153,22 @@ int load_params()
 
 void save_params()
 {
-
+        int i;
+        FILE *f;
+        f = fopen(fileloc, "w");
+        if (!f)
+                return;
+        for (i = 0; i < sc; i++) {
+                if (is_float(i))
+                        fprintf(f, "%c%lf%c\n", param_border,
+                                                *(double *)sp[i],
+                                                param_border);
+                else
+                        fprintf(f, "%c%d%c\n", param_border,
+                                               *(int *)sp[i],
+                                               param_border);
+        }
+        fclose(f);
 }
 
 static void initmm()
