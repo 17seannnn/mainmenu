@@ -13,7 +13,7 @@
 #include "mainmenu.h"
 
 double speed;
-int strength;
+int strength, distance, luck, mana, xp, gold;
 
 /* program name */
 const char  pn[]             = gettext_noop("Test");
@@ -26,15 +26,28 @@ const char  mt[][mm_bufsize] = { gettext_noop("Play game"),
 };
 /* settings text */
 const char  st[][mm_bufsize] = { gettext_noop("Speed"),
-                                 gettext_noop("Strength")
+                                 gettext_noop("Strength"),
+                                 gettext_noop("Distance"),
+                                 gettext_noop("Luck"),
+                                 gettext_noop("Mana"),
+                                 gettext_noop("Xp"),
+                                 gettext_noop("Gold")
 };
 /* settings range */
 const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
-                                 "i", "25", "1", "0", "50" };
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50"
+};
 /* settings pointers */
-      void *sp[]             = { &speed, &strength };
+      void *sp[]             = { &speed, &strength, &distance, &luck,
+                                 &mana, &xp, &gold
+};
 /* mainmenu/settings count */
-const int   mc = 3, sc = 2;
+const int   mc = 3, sc = 7;
 /* mainmenu colors */
 const int   mm_colors[mm_colors_count] = {
                                  COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
