@@ -271,6 +271,7 @@ static void decrease_param(int n)
                 if (*(int *)sp[n] < imin)
                         *(int *)sp[n] = imax;
         }
+        save_params();
 } 
 
 static void increase_param(int n)
@@ -288,6 +289,7 @@ static void increase_param(int n)
                 if (*(int *)sp[n] > imax)
                         *(int *)sp[n] = imin;
         }
+        save_params();
 } 
 
 static void draw_name()
