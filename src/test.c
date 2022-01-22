@@ -4,8 +4,8 @@
 
 #include "mainmenu.h"
 
-double speed = 0;
-int strength = 0;
+double speed;
+int strength;
 
 const char  pn[]             = "Test";
 const char  fn[]             = ".testcfg";
