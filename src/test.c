@@ -15,19 +15,27 @@
 double speed;
 int strength;
 
+/* program name */
 const char  pn[]             = gettext_noop("Test");
+/* file name */
 const char  fn[]             = ".testcfg";
+/* mainmenu text */
 const char  mt[][mm_bufsize] = { gettext_noop("Play game"),
                                  gettext_noop("Settings"),
                                  gettext_noop("Exit")
 };
+/* settings text */
 const char  st[][mm_bufsize] = { gettext_noop("Speed"),
                                  gettext_noop("Strength")
 };
+/* settings range */
 const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
                                  "i", "25", "1", "0", "50" };
+/* settings pointers */
       void *sp[]             = { &speed, &strength };
+/* mainmenu/settings count */
 const int   mc = 3, sc = 2;
+/* mainmenu colors */
 const int   mm_colors[mm_colors_count] = {
                                  COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
                                  COLOR_WHITE, COLOR_BLACK, 0,
