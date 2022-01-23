@@ -117,31 +117,40 @@ static void load_defaults()
                                                 i + range_default]);
 }
 
-static void parse_param(FILE *f, char *param, int bufsize)
+static int parse_param(FILE *f, char *param, int bufsize)
 {
         int i, c;
         do
                 c = fgetc(f);
-        while (c != param_border);
+        while (c != param_border && c != EOF);
+        if (c == EOF)
+                return 0;
         for (i = 0; i < bufsize-1; i++) {
                 c = fgetc(f);
-                if (c == param_border || c == EOF)
+                if (c == param_border)
                         break;
+                if (c == EOF)
+                        return 0;
                 param[i] = c;
         }
         param[i] = 0;
+        return 1;
 }
 
 static int load_params()
 {
-        int i;
+        int i, res;
         char param[mm_bufsize];
         FILE *f;
         f = fopen(fileloc, "r");
         if (!f)
                 return 0;
         for (i = 0; i < sc; i++) {
-                parse_param(f, param, mm_bufsize);
+                res = parse_param(f, param, mm_bufsize);
+                if (!res) {
+                        fclose(f);
+                        return 0;
+                }
                 if (is_float(i))
                         *(double *)sp[i] = atof(param);
                 else
