@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 15:40+0300\n"
+"POT-Creation-Date: 2022-01-23 13:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,50 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: test.c:18
+#: test.c:19
 msgid "Test"
 msgstr ""
 
-#: test.c:20
+#: test.c:24
 msgid "Play game"
 msgstr ""
 
-#: test.c:21
+#: test.c:25 test.c:26 test.c:27 test.c:28 test.c:29
+msgid "Button"
+msgstr ""
+
+#: test.c:30
 msgid "Settings"
 msgstr ""
 
-#: test.c:22
+#: test.c:31
 msgid "Exit"
 msgstr ""
 
-#: test.c:24
+#: test.c:35
 msgid "Speed"
 msgstr ""
 
-#: test.c:25
+#: test.c:36
 msgid "Strength"
+msgstr ""
+
+#: test.c:37
+msgid "Distance"
+msgstr ""
+
+#: test.c:38
+msgid "Luck"
+msgstr ""
+
+#: test.c:39
+msgid "Mana"
+msgstr ""
+
+#: test.c:40
+msgid "Xp"
+msgstr ""
+
+#: test.c:41
+msgid "Gold"
 msgstr ""
