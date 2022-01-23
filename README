@@ -6,6 +6,9 @@ Build test program
 ./build.sh install
 ./test
 
+Test russian language
+LANGUAGE=ru ./test
+
 How to use it
 
 Get mainmenu.c and mainmenu.h from src directory.
