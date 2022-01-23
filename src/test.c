@@ -12,8 +12,8 @@
 
 #include "mainmenu.h"
 
-double speed;
-int strength, distance, luck, mana, xp, gold;
+static double speed;
+static int strength, distance, luck, mana, xp, gold;
 
 /* program name */
 const char  pn[]             = gettext_noop("Test");
@@ -55,9 +55,13 @@ const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
 const int   mc = 8, sc = 7;
 /* mainmenu colors */
 const int   mm_colors[mm_colors_count] = {
+                                /* Program name */
                                  COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
+                                /* Default text */
                                  COLOR_WHITE, COLOR_BLACK, 0,
+                                /* Cursor */
                                  COLOR_RED, COLOR_BLACK, A_BOLD,
+                                /* Highlighted param */
                                  COLOR_RED, COLOR_BLACK, 0
 };
 
