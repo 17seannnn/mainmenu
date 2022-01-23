@@ -19,9 +19,11 @@ enum {
         name_sy   = 0,
 
         body_x  = 20,
-        body_y  = 6,
+        body_y  = 3,
         body_sx = 0,
         body_sy = name_nrow,
+        body_ex = 1,
+        body_ey = 4,
 
         diff_y = 2,
 
@@ -89,7 +91,7 @@ static void initcurses()
 {
         int row, col;
         getmaxyx(stdscr, row, col);
-        pad = newpad(row - name_nrow, col);
+        pad = newpad(row + (sc * diff_y) + (mc * diff_y), col);
         keypad(pad, 1);
         noecho();
         cbreak();
@@ -283,7 +285,7 @@ static void increase_param(int n)
                         *(int *)sp[n] = imin;
         }
         save_params();
-} 
+}
 
 static void draw_name()
 {
@@ -303,16 +305,16 @@ static void draw_mm(int padpos, struct cur c)
         for (i = 0; i < mc; i++, y += diff_y)
                 mvwaddstr(pad, y, x, _(mt[i]));
         show_cur(c);
-        prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
+        prefresh(pad, padpos, 0, body_sy, body_sx, row-body_ey, col-body_ex);
 }
 
 static int handle_mm()
 {
-        int row, col, key, padpos = 0;
+        int key, padpos = 0;
         struct cur c = { body_x - 2, body_y, 0 };
-        getmaxyx(stdscr, row, col);
-        draw_mm(padpos, c);
-        while ((key = wgetch(pad)) != '\n') {
+        do {
+                draw_mm(padpos, c);
+                key = wgetch(pad);
                 switch (key) {
                 case KEY_UP:
                         if (c.pos > 0) {
@@ -326,9 +328,10 @@ static int handle_mm()
                                 padpos += diff_y;
                         }
                         break;
+                default:
+                        break;
                 }
-                prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
-        }
+        } while (key != '\n');
         if (c.pos == mm_settings_pos)
                 return settings_choise;
         else
@@ -346,21 +349,21 @@ static void draw_sm(int padpos, struct cur c)
         for (i = 0; i < sc; i++, y += diff_y) {
                 wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
                 mvwaddstr(pad, y, x, _(st[i]));
-                i == 0 ? show_param(i, 1) : show_param(i, 0);
+                i == c.pos ? show_param(i, 1) : show_param(i, 0);
         }
         wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
         mvwaddstr(pad, y, x, _(mt[mm_exit_pos]));
         show_cur(c);
-        prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
+        prefresh(pad, padpos, 0, body_sy, body_sx, row-body_ey, col-body_ex);
 }
 
 static void handle_sm()
 {
-        int key, row, col, padpos = 0;
+        int key, padpos = 0;
         struct cur c = { body_x - 2, body_y, 0 };
-        getmaxyx(stdscr, row, col);
-        draw_sm(padpos, c);
-        while ((key = wgetch(pad)) != '\n') {
+        do {
+                draw_sm(padpos, c);
+                key = wgetch(pad);
                 switch (key) {
                 case KEY_UP:
                         if (c.pos > 0) {
@@ -390,9 +393,10 @@ static void handle_sm()
                         increase_param(c.pos);
                         show_param(c.pos, 1);
                         break;
+                default:
+                        break;
                 }
-                prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
-        }
+        } while (key != '\n');
 }
 
 int mainmenu()

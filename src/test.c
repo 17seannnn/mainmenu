@@ -21,6 +21,11 @@ const char  pn[]             = gettext_noop("Test");
 const char  fn[]             = ".testcfg";
 /* mainmenu text */
 const char  mt[][mm_bufsize] = { gettext_noop("Play game"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
                                  gettext_noop("Settings"),
                                  gettext_noop("Exit")
 };
@@ -47,7 +52,7 @@ const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
                                  &mana, &xp, &gold
 };
 /* mainmenu/settings count */
-const int   mc = 3, sc = 7;
+const int   mc = 8, sc = 7;
 /* mainmenu colors */
 const int   mm_colors[mm_colors_count] = {
                                  COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
