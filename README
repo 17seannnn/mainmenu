@@ -1,3 +1,106 @@
 mainmenu
 ========
 Simple module written on C with curses for small terminal games
+
+How to use it
+
+Get mainmenu.c and mainmenu.h from src directory.
+Move it in your project.
+
+In your main c file include <curses.h> and
+ if you want to use another language <locale.h> with <libintl.h>
+After that include "mainmenu.h"
+
+Now, make some global variables:
+
+Program name
+const char  pn[]             = gettext_noop("Test");
+
+Name for config file
+Every param will be saved in home directory of user so this file should have name starting
+ with '.'.
+const char  fn[]             = ".testcfg";
+
+Text for mainmenu
+You must have at least 3 texts. Last`ll use for exit, last but one for settings
+const char  mt[][mm_bufsize] = { 
+				 gettext_noop("Play game"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Button"),
+                                 gettext_noop("Settings"),
+                                 gettext_noop("Exit")
+};
+
+Text for settings
+const char  st[][mm_bufsize] = { 
+				 gettext_noop("Speed"),
+                                 gettext_noop("Strength"),
+                                 gettext_noop("Distance"),
+                                 gettext_noop("Luck"),
+                                 gettext_noop("Mana"),
+                                 gettext_noop("Xp"),
+                                 gettext_noop("Gold")
+};
+
+Here your values.
+First  - is it float or integer
+Second - default value
+Third  - difference between increasing/decreasing
+Fourth - minimal value
+Fifth  - max value
+const char  sr[][mm_bufsize] = { 
+				 "f", "0.25", "0.25", "0", "1",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50",
+                                 "i", "25", "1", "0", "50"
+};
+
+Pointers on your variables (they can be static global variables)
+      void *sp[]             = { 
+				 &speed, &strength, &distance, &luck,
+                                 &mana, &xp, &gold
+};
+
+Count of tabs/params in mainmenu/settings
+const int   mc = 8, sc = 7;
+
+Colors in program
+Background color, font color, attributes
+First  row - program name
+Second row - default text
+Third  row - cursor
+Fourth row - highlighted param
+const int   mm_colors[mm_colors_count] = {
+                                 COLOR_WHITE, COLOR_BLACK, A_STANDOUT,
+                                 COLOR_WHITE, COLOR_BLACK, 0,
+                                 COLOR_RED, COLOR_BLACK, A_BOLD,
+                                 COLOR_RED, COLOR_BLACK, 0
+};
+
+Also, you should have function to init your curses settings again because
+ mainmenu using their settings.
+Before endless loop you have to initscr().
+
+Your loop may look like this:
+        for (;;) {
+                res = mainmenu();
+                initcurses();
+		if (!res)
+			playgame();
+                if (res == exit_choise)
+                        break;
+        }
+exit_choise is in mainmenu.h like mm_bufsize and mm_colors_count.
+mainmenu() return index of text that someone choosed:
+if someone choosed Play game (first text in mainmenu) then mainmenu() will return 0.
+
+Don`t forget to endwin() after all.
+
+If you are using another language in your menu then
+ compile mainmenu.c with -lncursesw library
