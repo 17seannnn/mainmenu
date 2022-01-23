@@ -2,6 +2,10 @@ mainmenu
 ========
 Simple module written on C with curses for small terminal games
 
+Build test program
+./build.sh install
+./test
+
 How to use it
 
 Get mainmenu.c and mainmenu.h from src directory.
