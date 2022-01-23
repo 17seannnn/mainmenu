@@ -60,7 +60,7 @@ struct cur {
         int cur_x, cur_y, pos;
 };
 
-static int settings_pos, exit_pos;
+static int mm_settings_pos, mm_exit_pos, sm_exit_pos;
 static WINDOW *name, *pad;
 
 static char fileloc[mm_bufsize];
@@ -172,8 +172,9 @@ static void save_params()
 static void initmm()
 {
         int res;
-        settings_pos = mc - 2;
-        exit_pos     = mc - 1;
+        mm_settings_pos = mc - 2;
+        mm_exit_pos     = mc - 1;
+        sm_exit_pos     = sc;
         init_fileloc();
         res = load_params();
         if (!res) {
@@ -218,6 +219,8 @@ static void show_param(int n, int cur)
         col = getmaxx(stdscr);
         x = body_x + strlen(_(st[n])) + 1;
         y = body_y + n * 2;
+        if (n == sm_exit_pos)
+                return;
         if (cur)
                 wattrset(pad, COLOR_PAIR(apar_pair) | mm_colors[apar_attr]);
         else
@@ -318,7 +321,7 @@ static int handle_mm()
                         }
                         break;
                 case KEY_DOWN:
-                        if (c.pos < exit_pos) {
+                        if (c.pos < mm_exit_pos) {
                                 move_cur(&c, 1);
                                 padpos += diff_y;
                         }
@@ -326,10 +329,10 @@ static int handle_mm()
                 }
                 prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
         }
-        if (c.pos == settings_pos)
+        if (c.pos == mm_settings_pos)
                 return settings_choise;
         else
-        if (c.pos == exit_pos)
+        if (c.pos == mm_exit_pos)
                 return exit_choise;
         else
                 return c.pos;
@@ -340,13 +343,13 @@ static void draw_sm(int padpos, struct cur c)
         int i, row, col, y = body_y, x = body_x;
         getmaxyx(stdscr, row, col);
         wclear(pad);
-        for (i = 0; i < sc; i++, y += 2) {
+        for (i = 0; i < sc; i++, y += diff_y) {
                 wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
                 mvwaddstr(pad, y, x, _(st[i]));
                 i == 0 ? show_param(i, 1) : show_param(i, 0);
         }
         wattrset(pad, COLOR_PAIR(body_pair) | mm_colors[body_attr]);
-        mvwaddstr(pad, y, x, _(mt[exit_pos]));
+        mvwaddstr(pad, y, x, _(mt[mm_exit_pos]));
         show_cur(c);
         prefresh(pad, padpos, 0, body_sy, body_sx, row-name_nrow, col);
 }
@@ -361,19 +364,17 @@ static void handle_sm()
                 switch (key) {
                 case KEY_UP:
                         if (c.pos > 0) {
-                                if (c.pos != exit_pos)
-                                        show_param(c.pos, 0);
+                                show_param(c.pos, 0);
                                 move_cur(&c, -1);
                                 show_param(c.pos, 1);
                                 padpos -= diff_y;
                         }
                         break;
                 case KEY_DOWN:
-                        if (c.pos < sc) {
+                        if (c.pos < sm_exit_pos) {
                                 show_param(c.pos, 0);
                                 move_cur(&c, 1);
-                                if (c.pos != exit_pos)
-                                        show_param(c.pos, 1);
+                                show_param(c.pos, 1);
                                 padpos += diff_y;
                         }
                         break;
