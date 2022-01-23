@@ -20,7 +20,8 @@ const char  pn[]             = gettext_noop("Test");
 /* file name */
 const char  fn[]             = ".testcfg";
 /* mainmenu text */
-const char  mt[][mm_bufsize] = { gettext_noop("Play game"),
+const char  mt[][mm_bufsize] = { 
+                                 gettext_noop("Play game"),
                                  gettext_noop("Button"),
                                  gettext_noop("Button"),
                                  gettext_noop("Button"),
@@ -30,7 +31,8 @@ const char  mt[][mm_bufsize] = { gettext_noop("Play game"),
                                  gettext_noop("Exit")
 };
 /* settings text */
-const char  st[][mm_bufsize] = { gettext_noop("Speed"),
+const char  st[][mm_bufsize] = { 
+                                 gettext_noop("Speed"),
                                  gettext_noop("Strength"),
                                  gettext_noop("Distance"),
                                  gettext_noop("Luck"),
@@ -39,7 +41,8 @@ const char  st[][mm_bufsize] = { gettext_noop("Speed"),
                                  gettext_noop("Gold")
 };
 /* settings range */
-const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
+const char  sr[][mm_bufsize] = { 
+                                 "f", "0.25", "0.25", "0", "1",
                                  "i", "25", "1", "0", "50",
                                  "i", "25", "1", "0", "50",
                                  "i", "25", "1", "0", "50",
@@ -48,7 +51,8 @@ const char  sr[][mm_bufsize] = { "f", "0.25", "0.25", "0", "1",
                                  "i", "25", "1", "0", "50"
 };
 /* settings pointers */
-      void *sp[]             = { &speed, &strength, &distance, &luck,
+      void *sp[]             = { 
+                                 &speed, &strength, &distance, &luck,
                                  &mana, &xp, &gold
 };
 /* mainmenu/settings count */
