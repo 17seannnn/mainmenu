@@ -1,3 +1,5 @@
+/* mainmenu 1.1 */
+
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
