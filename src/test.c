@@ -100,5 +100,5 @@ int main()
                         break;
         }
         endwin();
-        return 1;
+        return 0;
 }
