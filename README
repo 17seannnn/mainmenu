@@ -29,7 +29,7 @@ Every param will be saved in home directory of user so this file should have nam
 const char  fn[]             = ".testcfg";
 
 Text for mainmenu
-You must have at least 3 texts. Last`ll use for exit, last but one for settings
+You must have at least 2 texts. Last`ll use for exit and if settings_menu is enabled then last but one for settings
 const char  mt[][mm_bufsize] = { 
 				 gettext_noop("Play game"),
                                  gettext_noop("Button"),
@@ -89,6 +89,9 @@ const int   mm_colors[mm_colors_count] = {
                                  COLOR_RED, COLOR_BLACK, A_BOLD,
                                  COLOR_RED, COLOR_BLACK, 0
 };
+
+If you want to use settings_menu then set this variable to 1 and 0 if you don`t
+const int   settings_menu = 1;
 
 Also, you should have function to init your curses settings again because
  mainmenu using their settings.
