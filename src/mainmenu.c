@@ -71,7 +71,7 @@ extern const char fn[], pn[], mt[][mm_bufsize],
                               st[][mm_bufsize],
                               sr[][mm_bufsize];
 extern       void *sp[];
-extern const int  mc, sc, mm_colors[];
+extern const int  mc, sc, mm_colors[], settings_menu;
 
 static int is_float(int n)
 {
@@ -341,7 +341,7 @@ static int handle_mm()
                         break;
                 }
         } while (key != '\n');
-        if (c.pos == mm_settings_pos)
+        if (c.pos == mm_settings_pos && settings_menu)
                 return settings_choise;
         else
         if (c.pos == mm_exit_pos)

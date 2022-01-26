@@ -69,6 +69,8 @@ const int   mm_colors[mm_colors_count] = {
                                  COLOR_RED, COLOR_BLACK, 0
 };
 
+const int settings_menu = 1;
+
 static void initgettext()
 {
         setlocale(LC_CTYPE, "");
