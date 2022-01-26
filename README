@@ -41,6 +41,17 @@ const char  mt[][mm_bufsize] = {
                                  gettext_noop("Exit")
 };
 
+If you want to use settings_menu then set this variable to 1 and 0 if you don`t
+const int   settings_menu = 1;
+
+So if you don`t want to use settings menu init settings arrays with 1:
+const char  st[1][mm_bufsize];
+const char  sr[1][mm_bufsize];
+      void *sp[1];
+
+const int   mc = 8, sc = 0;
+
+And if you want:
 Text for settings
 const char  st[][mm_bufsize] = { 
 				 gettext_noop("Speed"),
@@ -89,9 +100,6 @@ const int   mm_colors[mm_colors_count] = {
                                  COLOR_RED, COLOR_BLACK, A_BOLD,
                                  COLOR_RED, COLOR_BLACK, 0
 };
-
-If you want to use settings_menu then set this variable to 1 and 0 if you don`t
-const int   settings_menu = 1;
 
 Also, you should have function to init your curses settings again because
  mainmenu using their settings.
