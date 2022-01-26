@@ -57,7 +57,7 @@ enum {
         range_min,
         range_max,
 
-        param_border = '"',
+        param_border = '"'
 };
 
 struct cur {
@@ -171,7 +171,7 @@ static void save_params()
                 return;
         for (i = 0; i < sc; i++) {
                 if (is_float(i))
-                        fprintf(f, "%c%lf%c\n", param_border,
+                        fprintf(f, "%c%f%c\n", param_border,
                                                 *(double *)sp[i],
                                                 param_border);
                 else
