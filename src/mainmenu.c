@@ -69,11 +69,13 @@ static WINDOW *name, *pad;
 
 static char fileloc[mm_bufsize];
 
-extern const char fn[], pn[], mt[][mm_bufsize],
-                              st[][mm_bufsize],
-                              sr[][mm_bufsize];
-extern       void *sp[];
-extern const int  mc, sc, mm_colors[], settings_menu;
+static const char *fn, *pn, (*mt)[mm_bufsize],
+                            (*st)[mm_bufsize],
+                            (*sr)[mm_bufsize];
+static       void **sp;
+static int  mc, sc;
+static const int *mm_colors;
+static int  settings_menu;
 
 static int is_float(int n)
 {
@@ -182,7 +184,25 @@ static void save_params()
         fclose(f);
 }
 
-static void initmm()
+void initmm(const char *_pn, const char *_fn,
+            const char (*_mt)[mm_bufsize], const char (*_st)[mm_bufsize],
+            const char (*_sr)[mm_bufsize], void *_sp[],
+            const int _mc, const int _sc,
+            const int _mm_colors[mm_colors_count], const int _settings_menu)
+{
+        pn = _pn;
+        fn = _fn;
+        mt = _mt;
+        st = _st;
+        sr = _sr;
+        sp = _sp;
+        mc = _mc;
+        sc = _sc;
+        mm_colors = _mm_colors;
+        settings_menu = _settings_menu;
+}
+
+static void initmm_inside()
 {
         int res;
         mm_settings_pos = mc - 2;
@@ -413,7 +433,7 @@ static void handle_sm()
 int mainmenu()
 {
         int res;
-        initmm();
+        initmm_inside();
         draw_name();
         for (;;) {
                 res = handle_mm();
