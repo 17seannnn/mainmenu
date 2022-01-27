@@ -48,7 +48,7 @@ static const char  sr[][mm_bufsize] = {
                                  "i", "25", "1", "0", "50"
 };
 /* settings pointers */
-static      void *sp[]             = { 
+static      void *sp[]              = {
                                  &speed, &strength, &distance, &luck,
                                  &mana, &xp, &gold
 };
