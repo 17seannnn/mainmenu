@@ -45,9 +45,9 @@ If you want to use settings_menu then set this variable to 1 and 0 if you don`t
 static const int settings_menu = 1;
 
 So if you don`t want to use settings menu init settings arrays with 1:
-static const char st[1][mm_bufsize];
-static const char sr[1][mm_bufsize];
-static void *sp[1];
+static const char (*st)[mm_bufsize];
+static const char (*sr)[mm_bufsize];
+static void **sp;
 
 static const int mc = 8, sc = 0;
 
