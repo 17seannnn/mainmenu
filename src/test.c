@@ -66,8 +66,6 @@ static const int   mm_colors[mm_colors_count] = {
                                  COLOR_RED, COLOR_BLACK, 0
 };
 
-static const int settings_menu = 1;
-
 static void initgettext()
 {
         setlocale(LC_CTYPE, "");
@@ -91,7 +89,7 @@ int main()
         int res;
         initgettext();
         initscr();
-        initmm(pn, fn, mt, st, sr, sp, mc, sc, mm_colors, settings_menu);
+        initmm(pn, fn, mt, st, sr, sp, mc, sc, mm_colors);
         for (;;) {
                 res = mainmenu();
                 initcurses();

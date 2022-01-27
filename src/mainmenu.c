@@ -75,7 +75,6 @@ static const char *fn, *pn, (*mt)[mm_bufsize],
 static       void **sp;
 static int  mc, sc;
 static const int *mm_colors;
-static int  settings_menu;
 
 static int is_float(int n)
 {
@@ -187,8 +186,7 @@ static void save_params()
 void initmm(const char *_pn, const char *_fn,
             const char (*_mt)[mm_bufsize], const char (*_st)[mm_bufsize],
             const char (*_sr)[mm_bufsize], void *_sp[],
-            const int _mc, const int _sc,
-            const int _mm_colors[mm_colors_count], const int _settings_menu)
+            const int _mc, const int _sc, const int _mm_colors[mm_colors_count])
 {
         pn = _pn;
         fn = _fn;
@@ -199,7 +197,6 @@ void initmm(const char *_pn, const char *_fn,
         mc = _mc;
         sc = _sc;
         mm_colors = _mm_colors;
-        settings_menu = _settings_menu;
 }
 
 static void initmm_inside()
@@ -363,7 +360,7 @@ static int handle_mm()
                         break;
                 }
         } while (key != '\n');
-        if (c.pos == mm_settings_pos && settings_menu)
+        if (c.pos == mm_settings_pos && sc > 0)
                 return settings_choise;
         else
         if (c.pos == mm_exit_pos)
