@@ -17,7 +17,7 @@ static const char  pn[]             = gettext_noop("Test");
 /* file name */
 static const char  fn[]             = ".testcfg";
 /* mainmenu text */
-static const char  mt[][mm_bufsize] = { 
+static const char  mt[][mm_bufsize] = {
                                  gettext_noop("Play game"),
                                  gettext_noop("Button"),
                                  gettext_noop("Button"),
@@ -28,7 +28,7 @@ static const char  mt[][mm_bufsize] = {
                                  gettext_noop("Exit")
 };
 /* settings text */
-static const char  st[][mm_bufsize] = { 
+static const char  st[][mm_bufsize] = {
                                  gettext_noop("Speed"),
                                  gettext_noop("Strength"),
                                  gettext_noop("Distance"),
@@ -38,7 +38,7 @@ static const char  st[][mm_bufsize] = {
                                  gettext_noop("Gold")
 };
 /* settings range */
-static const char  sr[][mm_bufsize] = { 
+static const char  sr[][mm_bufsize] = {
                                  "f", "0.25", "0.25", "0", "1",
                                  "i", "25", "1", "0", "50",
                                  "i", "25", "1", "0", "50",
