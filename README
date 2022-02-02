@@ -41,11 +41,7 @@ static const char mt[][mm_bufsize] = {
                                  gettext_noop("Exit")
 };
 
-So if you don`t want to use settings menu init settings arrays with 1:
-static const char (*st)[mm_bufsize];
-static const char (*sr)[mm_bufsize];
-static void **sp;
-
+So if you don`t want to use settings just set settings counter to 0:
 static const int mc = 8, sc = 0;
 
 And if you want:
@@ -99,7 +95,11 @@ static const int mm_colors[mm_colors_count] = {
 };
 
 Now init mainmenu somewhere (in example i use main function)
+With settings menu:
         initmm(pn, fn, mt, st, sr, sp, mc, sc, mm_colors);
+Without:
+        initmm(pn, fn, mt, NULL, NULL, NULL, mc, sc, mm_colors);
+
 
 Also, you should have function to init your curses settings again because
  mainmenu using their settings.
